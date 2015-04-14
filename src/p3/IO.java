@@ -46,7 +46,7 @@ public class IO {
         }
 
         System.out.println("-- [DEBUG] END_IO Event created");
-        eventQueue.insertEvent(new Event(Constants.END_IO,clock+getRandomIoTime()));
+        eventQueue.insertEvent(new Event(Constants.END_IO, getRandomIoTime()));
 
     }
 
@@ -67,8 +67,11 @@ public class IO {
         return currentProcess;
     }
 
-    public long getRandomIoTime(){
-        return (long) (Math.random()*(timeAvg+0.5*timeAvg));
+    public long getRandomIoTime() {
+        long rand = (long) (2 * Math.random() * timeAvg);
+        long result = 1 + rand;
+
+        return result;
     }
 
 }
