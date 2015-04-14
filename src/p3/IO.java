@@ -70,7 +70,7 @@ public class IO {
     }
 
     public long getRandomIoTime() {
-        long rand = (long) (2 * Math.random() * timeAvg);
+        long rand = (long) (2 * Math.random() * avgTime);
         long result = 1 + rand;
 
         return result;
