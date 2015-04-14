@@ -18,15 +18,22 @@ public class CPU {
     public void addProcess(Process process) {
         cpuQueue.insert(process);
     }
+    public Process getCurrentProcess() {
+        return currentProcess;
+    }
 
     public void loadProcess() {
         currentProcess = (Process) cpuQueue.getNext();
+        cpuQueue.removeNext();
         gui.setCpuActive(currentProcess);
 
     }
-    public void stopProcess() {
+    public Process stopProcess() {
+        Process p = currentProcess;
         currentProcess = null;
-        cpuQueue.removeNext();
+        gui.setCpuActive(null);
+        return p;
+
     }
     
     /*

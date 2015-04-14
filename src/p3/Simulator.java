@@ -164,13 +164,15 @@ public class Simulator implements Constants
 	 * Simulates a process switch.
 	 */
 	private void switchProcess() {
-		// Incomplete
+        cpu.getCurrentProcess();
+        cpu.loadProcess();
 	}
 
 	/**
 	 * Ends the active process, and deallocates any resources allocated to it.
 	 */
 	private void endProcess() {
+        Process p = cpu.stopProcess();
 
 	}
 
