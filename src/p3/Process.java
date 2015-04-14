@@ -117,13 +117,11 @@ public class Process implements Constants
 		statistics.totalTimeSpentWaitingForMemory += timeSpentWaitingForMemory;
 		statistics.nofCompletedProcesses++;
 	}
-
+    /**
+    * Returns the total time needed of the current process
+    */
     public long getCpuTimeNeeded() {
         return cpuTimeNeeded;
-    }
-
-    public long getCpuTimeLeft() {
-
     }
 
     public void updateTime() {
