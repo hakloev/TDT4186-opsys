@@ -166,6 +166,7 @@ public class Simulator implements Constants
 	private void switchProcess() {
         cpu.getCurrentProcess();
         cpu.loadProcess();
+
 	}
 
 	/**
@@ -205,6 +206,8 @@ public class Simulator implements Constants
 	 * @param reader	The input reader from which to read a number.
 	 * @return			The number that was inputted.
 	 */
+
+
 	public static long readLong(BufferedReader reader) {
 		try {
 			return Long.parseLong(reader.readLine());
