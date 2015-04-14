@@ -195,6 +195,9 @@ public class Simulator implements Constants
 	 */
 	private void endProcess() {
         Process p = cpu.stopProcess();
+        memory.processCompleted(p);
+        pushProcessOnToCpuAndCreateNewEvent();
+
 
 	}
 
@@ -203,9 +206,8 @@ public class Simulator implements Constants
 	 * perform an I/O operation.
 	 */
 	private void processIoRequest() {
-
-
-		Process process = cpu.stopProcess();
+        Process process = cpu.stopProcess();
+        process.updateCpuTime(clock);
 		io.insertQueue(process);
 
 		//process.updateProcess(IO_QUEUE);
@@ -221,6 +223,9 @@ public class Simulator implements Constants
 
 		this.pushProcessOnToCpuAndCreateNewEvent();
 
+        System.out.println("-- [DEBUG][PID: " + process.getProcessId() +"] Processing IO-Request");
+
+
 	}
 
 	/**
@@ -230,6 +235,7 @@ public class Simulator implements Constants
 	private void endIoOperation() {
 		// Incomplete
 		Process process = this.io.getCurrentProcess();
+        process.updateIOTime(clock);
 		this.io.stopIO(clock);
 		this.cpu.addProcess(process);
 

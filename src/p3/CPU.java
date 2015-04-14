@@ -25,9 +25,12 @@ public class CPU {
     }
 
     public Process loadProcess() {
+        if (cpuQueue.isEmpty()) {
+            return null;
+        }
         currentProcess = (Process) cpuQueue.removeNext();
         gui.setCpuActive(currentProcess);
-        System.out.println("-- [DEBUG][PID: " + currentProcess.getProcessId() + " ] Loading process from CPU queue into CPU");
+        System.out.println("-- [DEBUG][PID: " + currentProcess.getProcessId() + "] Loading process from CPU queue into CPU");
         return currentProcess;
 
     }

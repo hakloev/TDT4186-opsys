@@ -38,7 +38,10 @@ public class IO {
 
         currentProcess = (Process) ioQueue.removeNext();
 
+
         gui.setIoActive(currentProcess); // gui
+        System.out.println("-- [DEBUG] END_IO Event created");
+
 
         return currentProcess;
 
@@ -66,8 +69,11 @@ public class IO {
         ioQueue.insert(process);
     }
 
-    public long getRandomIoTime(){
-        return (long) (Math.random()*(avgTime+0.5*avgTime));
+    public long getRandomIoTime() {
+        long rand = (long) (2 * Math.random() * timeAvg);
+        long result = 1 + rand;
+
+        return result;
     }
 
 }
