@@ -122,5 +122,9 @@ public class Process implements Constants
         return cpuTimeNeeded;
     }
 
+    public long getProcessId() {
+        return processId;
+    }
+
 	// Add more methods as needed
 }
