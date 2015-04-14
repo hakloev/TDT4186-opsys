@@ -16,24 +16,25 @@ public class CPU {
 
     }
     public void addProcess(Process process) {
-        System.out.println("-- [DEBUG] Process added to CPU queue");
+        System.out.println("-- [DEBUG][PID: " + process.getProcessId() + "] Process added to CPU queue");
         cpuQueue.insert(process);
     }
     public Process getCurrentProcess() {
-        System.out.println("-- [DEBUG] Returning current process from CPU, pid " + currentProcess.getProcessId());
+        System.out.println("-- [DEBUG][PID: " + currentProcess.getProcessId() + "] Returning current process from CPU");
         return currentProcess;
     }
 
-    public void loadProcess() {
-        System.out.println("-- [DEBUG] Loading process from CPU queue into CPU");
+    public Process loadProcess() {
         currentProcess = (Process) cpuQueue.getNext();
         cpuQueue.removeNext();
         gui.setCpuActive(currentProcess);
+        System.out.println("-- [DEBUG][PID: " + currentProcess.getProcessId() + " ] Loading process from CPU queue into CPU");
+        return currentProcess;
 
     }
     public Process stopProcess() {
-        System.out.println("-- [DEBUG] Stopping active CPU process");
         Process p = currentProcess;
+        System.out.println("-- [DEBUG][PID: " + currentProcess.getProcessId() + "] Stopping active CPU process");
         currentProcess = null;
         gui.setCpuActive(null);
         return p;

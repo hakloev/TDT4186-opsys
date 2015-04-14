@@ -22,6 +22,8 @@ public class Simulator implements Constants
 	private long avgArrivalInterval;
 	// Add member variables as needed
 
+    private long maxCpuTime;
+
     private CPU cpu;
     private IO io;
 
@@ -49,6 +51,7 @@ public class Simulator implements Constants
 		memory = new Memory(memoryQueue, memorySize, statistics);
 		clock = 0;
 		// Add code as needed
+        this.maxCpuTime = maxCpuTime;
         cpu = new CPU(cpuQueue, statistics, gui);
         io = new IO(ioQueue, statistics, avgIoTime, gui);
 
@@ -124,37 +127,6 @@ public class Simulator implements Constants
 		}
 	}
 
-	/**
-	 * Simulates a process arrival/creation.
-	 */
-	private void createProcess() {
-		// Create a new process
-        System.out.println("-- [DEBUG] Creating new process due to NEW_PROCESS event");
-        Process newProcess = new Process(memory.getMemorySize(), clock);
-		memory.insertProcess(newProcess);
-		flushMemoryQueue();
-
-        if (cpu.isIdle()) {
-            pushProcessOnToCpuAndCreateNewEvent();
-        }
-
-		// Add an event for the next process arrival
-		long nextArrivalTime = clock + 1 + (long)(2*Math.random()*avgArrivalInterval);
-		eventQueue.insertEvent(new Event(NEW_PROCESS, nextArrivalTime));
-		// Update statistics
-		statistics.nofCreatedProcesses++;
-    }
-
-    private void pushProcessOnToCpuAndCreateNewEvent() {
-        System.out.println("-- [DEBUG] Starting CPU process and creating new event based on clock");
-        Process currentProcess = cpu.loadProcess();
-        if (currentProcess != null) {
-            System.out.println("");
-        } else {
-            System.out.println("-- [DEBUG] There is no process on the CPU queue");
-        }
-    }
-
     /**
 	 * Transfers processes from the memory queue to the ready queue as long as there is enough
 	 * memory for the processes.
@@ -181,12 +153,39 @@ public class Simulator implements Constants
 		}
 	}
 
+    /**
+     * Simulates a process arrival/creation.
+     */
+    private void createProcess() {
+        // Create a new process
+        System.out.println("-- [DEBUG] Creating new process due to NEW_PROCESS event");
+        Process newProcess = new Process(memory.getMemorySize(), clock);
+        memory.insertProcess(newProcess);
+        flushMemoryQueue();
+
+        if (cpu.isIdle()) {
+            pushProcessOnToCpuAndCreateNewEvent();
+        }
+
+        // Add an event for the next process arrival
+        long nextArrivalTime = clock + 1 + (long)(2*Math.random()*avgArrivalInterval);
+        eventQueue.insertEvent(new Event(NEW_PROCESS, nextArrivalTime));
+        // Update statistics
+        statistics.nofCreatedProcesses++;
+    }
+
 	/**
 	 * Simulates a process switch.
 	 */
 	private void switchProcess() {
-        Process p = cpu.getCurrentProcess();
-        cpu.loadProcess();
+        // fjerne er i cpu nå, og legge i cpu queue,
+        // legge inn en ny i cpu, fra første posisjon i cpu queue
+        // TODO: needs stats
+        Process oldProcess = cpu.stopProcess();
+        cpu.addProcess(oldProcess);
+
+        pushProcessOnToCpuAndCreateNewEvent();
+
 	}
 
 	/**
@@ -215,12 +214,29 @@ public class Simulator implements Constants
 		// Incomplete
 	}
 
-	/**
-	 * Reads a number from the an input reader.
-	 * @param reader	The input reader from which to read a number.
-	 * @return			The number that was inputted.
-	 */
-	public static long readLong(BufferedReader reader) {
+    private void pushProcessOnToCpuAndCreateNewEvent() {
+        System.out.println("-- [DEBUG] Starting CPU process and creating new event based on clock");
+        Process currentProcess = cpu.loadProcess();
+        if (currentProcess != null) {
+            System.out.println("-- [DEBUG][PID: " + currentProcess.getProcessId()  + "] " + maxCpuTime + " | CPU TIME LEFT | IO TIME LEFT" );
+            if () {
+                eventQueue.insertEvent(new Event(SWITCH_PROCESS, ));
+            } else if () {
+                eventQueue.insertEvent(new Event(END_PROCESS, ));
+            } else {
+                eventQueue.insertEvent(new Event(IO_REQUEST, ));
+            }
+        } else {
+            System.out.println("-- [DEBUG] There is no process on the CPU queue");
+        }
+    }
+
+    /**
+     * Reads a number from the an input reader.
+     * @param reader	The input reader from which to read a number.
+     * @return			The number that was inputted.
+     */
+    public static long readLong(BufferedReader reader) {
 		try {
 			return Long.parseLong(reader.readLine());
 		} catch (IOException ioe) {
