@@ -144,8 +144,6 @@ public class Simulator implements Constants
 			// Since we haven't implemented the CPU and I/O device yet,
 			// we let the process leave the system immediately, for now.
 
-			// Try to use the freed memory:
-			flushMemoryQueue();
 			// Update statistics
 			p.updateStatistics(statistics);
 
@@ -299,7 +297,7 @@ public class Simulator implements Constants
 	 */
 	public static void main(String args[]) {
         if (debug) {
-            SimulationGui gui = new SimulationGui(2048, 100, 225, 250000, 5000);
+            SimulationGui gui = new SimulationGui(2048, 500, 225, 250000, 5000);
         } else {
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             System.out.println("Please input system parameters: ");
