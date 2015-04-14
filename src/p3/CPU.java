@@ -16,18 +16,25 @@ public class CPU {
 
     }
     public void addProcess(Process process) {
+        System.out.println("-- [DEBUG][PID: " + process.getProcessId() + "] Process added to CPU queue");
         cpuQueue.insert(process);
+    }
+    public Process getCurrentProcess() {
+        System.out.println("-- [DEBUG][PID: " + currentProcess.getProcessId() + "] Returning current process from CPU");
+        return currentProcess;
     }
 
     public Process loadProcess() {
         currentProcess = (Process) cpuQueue.getNext();
         cpuQueue.removeNext();
         gui.setCpuActive(currentProcess);
+        System.out.println("-- [DEBUG][PID: " + currentProcess.getProcessId() + " ] Loading process from CPU queue into CPU");
         return currentProcess;
 
     }
     public Process stopProcess() {
         Process p = currentProcess;
+        System.out.println("-- [DEBUG][PID: " + currentProcess.getProcessId() + "] Stopping active CPU process");
         currentProcess = null;
         gui.setCpuActive(null);
         return p;
@@ -48,6 +55,7 @@ public class CPU {
     */
 
     public boolean isIdle() {
+        System.out.println("-- [DEBUG] CPU is idle: " + (currentProcess == null));
         return (currentProcess == null);
     }
 

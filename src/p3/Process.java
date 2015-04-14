@@ -124,6 +124,10 @@ public class Process implements Constants
         return cpuTimeNeeded;
     }
 
+    public long getProcessId() {
+        return processId;
+
+    }
     public void updateTime() {
         long currentTime = System.currentTimeMillis() - this.timeOfLastEvent;
         timeOfLastEvent = currentTime;
