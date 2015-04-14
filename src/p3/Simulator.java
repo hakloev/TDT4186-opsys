@@ -72,10 +72,15 @@ public class Simulator implements Constants
 			long timeDifference = event.getTime()-clock;
 			// ...and update the clock.
 			clock = event.getTime();
+
 			// Let the memory unit and the GUI know that time has passed
-			memory.timePassed(timeDifference);
+            memory.timePassed(timeDifference);
 			gui.timePassed(timeDifference);
+            // Add time passed to our units, CPU and IO
+            cpu.timePassed(timeDifference);
+            io.timePassed(timeDifference);
 			// Deal with the event
+
 			if (clock < simulationLength) {
 				processEvent(event);
 			}
@@ -143,7 +148,6 @@ public class Simulator implements Constants
             cpu.addProcess(p);
 			// Since we haven't implemented the CPU and I/O device yet,
 			// we let the process leave the system immediately, for now.
-
 
 
 			// Try to use the freed memory:

@@ -7,14 +7,17 @@ public class CPU {
     private Queue cpuQueue;
     private Statistics stats;
 
+
     public CPU(Queue cpuQueue, Statistics stats) {
         this.cpuQueue = cpuQueue;
         this.stats = stats;
 
     }
+
     public void addProcess(Process process) {
         cpuQueue.insert(process);
     }
+
     public void work() {
         Process currentElement = (Process) cpuQueue.getNext();
 
@@ -23,5 +26,17 @@ public class CPU {
         //Oppdatere stats
         stats.nofCompletedProcesses += 1;
         cpuQueue.removeNext();
+    }
+
+
+    /**
+     * This method is called when a discrete amount of time has passed.
+     * @param timePassed	The amount of time that has passed since the last call to this method.
+     */
+    public void timePassed(long timePassed) {
+        stats.memoryQueueLengthTime += cpuQueue.getQueueLength()*timePassed;
+        if (cpuQueue.getQueueLength() > stats.memoryQueueLargestLength) {
+            stats.memoryQueueLargestLength = cpuQueue.getQueueLength();
+        }
     }
 }
