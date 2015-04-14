@@ -7,18 +7,35 @@ public class CPU {
     private Queue cpuQueue;
     private Statistics stats;
     private Process currentProcess = null;
+    private Gui gui;
 
-
-    public CPU(Queue cpuQueue, Statistics stats) {
+    public CPU(Queue cpuQueue, Statistics stats, Gui gui) {
         this.cpuQueue = cpuQueue;
         this.stats = stats;
+        this.gui = gui;
 
     }
-
     public void addProcess(Process process) {
         cpuQueue.insert(process);
     }
+    public Process getCurrentProcess() {
+        return currentProcess;
+    }
 
+    public void loadProcess() {
+        currentProcess = (Process) cpuQueue.getNext();
+        cpuQueue.removeNext();
+        gui.setCpuActive(currentProcess);
+
+    }
+    public Process stopProcess() {
+        Process p = currentProcess;
+        currentProcess = null;
+        gui.setCpuActive(null);
+        return p;
+
+    }
+    
     /*
     public void work() {
         currentProcess = (Process) cpuQueue.getNext();

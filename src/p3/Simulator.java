@@ -47,7 +47,7 @@ public class Simulator implements Constants
 		memory = new Memory(memoryQueue, memorySize, statistics);
 		clock = 0;
 		// Add code as needed
-        cpu = new CPU(cpuQueue, statistics);
+        cpu = new CPU(cpuQueue, statistics, gui);
         io = new IO(ioQueue, statistics);
 
     }
@@ -164,13 +164,15 @@ public class Simulator implements Constants
 	 * Simulates a process switch.
 	 */
 	private void switchProcess() {
-		// Incomplete
+        cpu.getCurrentProcess();
+        cpu.loadProcess();
 	}
 
 	/**
 	 * Ends the active process, and deallocates any resources allocated to it.
 	 */
 	private void endProcess() {
+        Process p = cpu.stopProcess();
 
 	}
 
