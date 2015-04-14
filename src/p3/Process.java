@@ -148,5 +148,14 @@ public class Process implements Constants
         timeSpentInIo += timeSpentInIo + timeUsed;
     }
 
+	public void enteredIOQueue() {
+
+	}
+
+	public void leftIoQueue() {
+
+	}
+
+
 	// Add more methods as needed
 }

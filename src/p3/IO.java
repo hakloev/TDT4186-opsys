@@ -9,13 +9,14 @@ public class IO {
     private Gui gui;
     private Process currentProcess = null;
     private EventQueue eventQueue;
+    private long timeAvg;
 
-
-    public IO(Queue ioQueue, Statistics stats, Gui gui, EventQueue eventQueue) {
+    public IO(Queue ioQueue, Statistics stats, Gui gui, EventQueue eventQueue, long timeAvg) {
         this.ioQueue = ioQueue;
         this.stats = stats;
         this.gui = gui;
         this.eventQueue = eventQueue;
+        this.timeAvg = timeAvg;
     }
 
 
@@ -41,14 +42,16 @@ public class IO {
         }
         else {
             this.ioQueue.insert(p);
+
         }
 
         System.out.println("-- [DEBUG] END_IO Event created");
-        eventQueue.insertEvent(new Event(Constants.END_IO,clock));
+        eventQueue.insertEvent(new Event(Constants.END_IO,clock+getRandomIoTime()));
 
     }
 
     public void stopIO(long clock) {
+
         if (!this.ioQueue.isEmpty()){
             this.currentProcess = (Process) this.ioQueue.removeNext();
         }
@@ -62,6 +65,10 @@ public class IO {
 
     public Process getCurrentProcess() {
         return currentProcess;
+    }
+
+    public long getRandomIoTime(){
+        return (long) (Math.random()*(timeAvg+0.5*timeAvg));
     }
 
 }
