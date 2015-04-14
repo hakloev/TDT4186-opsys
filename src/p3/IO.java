@@ -26,9 +26,9 @@ public class IO {
      * @param timePassed	The amount of time that has passed since the last call to this method.
      */
     public void timePassed(long timePassed) {
-        stats.memoryQueueLengthTime += ioQueue.getQueueLength()*timePassed;
-        if (ioQueue.getQueueLength() > stats.memoryQueueLargestLength) {
-            stats.memoryQueueLargestLength = ioQueue.getQueueLength();
+        stats.ioQueueLengthTime += ioQueue.getQueueLength()*timePassed;
+        if (ioQueue.getQueueLength() > stats.ioQueueLargestLength) {
+            stats.ioQueueLargestLength = ioQueue.getQueueLength();
         }
     }
 

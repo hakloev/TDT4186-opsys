@@ -17,6 +17,14 @@ public class Statistics
 	public long memoryQueueLengthTime = 0;
 	/** The largest memory queue length that has occured */
 	public long memoryQueueLargestLength = 0;
+
+    // Our added stats:
+    public long nufIoOperations = 0;
+    public long nufForcedOperations = 0;
+    public long cpuQueueLengthTime = 0;
+    public long cpuQueueLargestLength = 0;
+    public long ioQueueLengthTime = 0;
+    public long ioQueueLargestLength = 0;
     
 	/**
 	 * Prints out a report summarizing all collected data about the simulation.
@@ -28,13 +36,33 @@ public class Statistics
 		System.out.println();
 		System.out.println("Number of completed processes:                                "+nofCompletedProcesses);
 		System.out.println("Number of created processes:                                  "+nofCreatedProcesses);
-		System.out.println();
+        System.out.println("Number of (forced) process switches:                          "+nufForcedOperations);
+        System.out.println("Number of processed I/O operations:                           "+nufIoOperations);
+        System.out.println("Average throughput (processes per second):                    ");
+        System.out.println();
+        System.out.println("Total CPU time spent processing:");
+        System.out.println("Fraction of CPU time spent processing:");
+        System.out.println("Total CPU time spent waiting:");
+        System.out.println("Fraction of CPU time spent waiting:");
+        System.out.println();
 		System.out.println("Largest occuring memory queue length:                         "+memoryQueueLargestLength);
 		System.out.println("Average memory queue length:                                  "+(float)memoryQueueLengthTime/simulationLength);
-		if(nofCompletedProcesses > 0) {
+        System.out.println("Largest occuring CPU queue length:                            "+cpuQueueLargestLength);
+        System.out.println("Average CPU queue length:                                     "+(float)cpuQueueLengthTime/simulationLength);
+        System.out.println("Largest occuring I/O queue length:                            "+ioQueueLargestLength);
+        System.out.println("Average I/O queue length:                                     "+(float)ioQueueLengthTime/simulationLength);
+        if(nofCompletedProcesses > 0) {
 			System.out.println("Average # of times a process has been placed in memory queue: "+1);
-			System.out.println("Average time spent waiting for memory per process:            "+
+            System.out.println("Average # of times a process has been placed in CPU queue:");
+            System.out.println("Average # of times a process has been placed in I/O queue:");
+            System.out.println();
+            System.out.println("Average time spent in system per process:");
+            System.out.println("Average time spent waiting for memory per process:            "+
 				totalTimeSpentWaitingForMemory/nofCompletedProcesses+" ms");
-		}
+            System.out.println("Average time spent waiting for CPU per process:");
+            System.out.println("Average time spent processing per process:");
+            System.out.println("Average time spent waiting for I/O per process:");
+            System.out.println("Average time spent in I/O per process:");
+        }
 	}
 }

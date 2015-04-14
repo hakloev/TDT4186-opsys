@@ -65,9 +65,9 @@ public class CPU {
      * @param timePassed	The amount of time that has passed since the last call to this method.
      */
     public void timePassed(long timePassed) {
-        stats.memoryQueueLengthTime += cpuQueue.getQueueLength()*timePassed;
-        if (cpuQueue.getQueueLength() > stats.memoryQueueLargestLength) {
-            stats.memoryQueueLargestLength = cpuQueue.getQueueLength();
+        stats.cpuQueueLengthTime += cpuQueue.getQueueLength()*timePassed;
+        if (cpuQueue.getQueueLength() > stats.cpuQueueLargestLength) {
+            stats.cpuQueueLargestLength = cpuQueue.getQueueLength();
         }
     }
 }

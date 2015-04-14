@@ -186,7 +186,7 @@ public class Simulator implements Constants
         System.out.println("-- [DEBUG][PID: " + oldProcess.getProcessId() + "] Removing from CPU");
 
         pushProcessOnToCpuAndCreateNewEvent();
-
+        statistics.nufForcedOperations++;
 	}
 
 	/**
@@ -198,8 +198,6 @@ public class Simulator implements Constants
         System.out.println("-- [DEBUG][PID: " + p.getProcessId() + "] Ending process and deallocating memory");
         memory.processCompleted(p);
         pushProcessOnToCpuAndCreateNewEvent();
-
-
 	}
 
 	/**
@@ -248,6 +246,7 @@ public class Simulator implements Constants
             System.out.println("-- [DEBUG][END-IO][PID: " + process.getProcessId() + "] Created END_IO of process");
             eventQueue.insertEvent(new Event(END_IO, clock + 1 + (long)(2*Math.random()*avgIoTime)));
         }
+        statistics.nufIoOperations++;
 
 
 	}
