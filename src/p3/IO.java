@@ -8,17 +8,14 @@ public class IO {
     private Statistics stats;
     private Gui gui;
     private Process currentProcess = null;
-    private EventQueue eventQueue;
-    private long timeAvg;
+    private long avgTime;
 
-    public IO(Queue ioQueue, Statistics stats, Gui gui, EventQueue eventQueue, long timeAvg) {
+    public IO(Queue ioQueue, Statistics stats, Gui gui, long avgTime) {
         this.ioQueue = ioQueue;
         this.stats = stats;
         this.gui = gui;
-        this.eventQueue = eventQueue;
-        this.timeAvg = timeAvg;
+        this.avgTime = avgTime;
     }
-
 
 
     /**
@@ -34,31 +31,25 @@ public class IO {
 
     // Does not change the clock time, needs to calcucate the time left in IO and add it to the event in the eventQueue
 
-    public void runIO(Process p, long clock) {
-        System.out.println("-- [DEBUG][PID: " +p.getProcessId() + "] Run IO");
-        if (this.currentProcess == null) {
-            this.currentProcess = p;
-            gui.setIoActive(p);
-        }
-        else {
-            this.ioQueue.insert(p);
-
+    public Process runIO() {
+        if (ioQueue.isEmpty()) {
+            currentProcess = null;
         }
 
-        eventQueue.insertEvent(new Event(Constants.END_IO,clock+getRandomIoTime()));
+        currentProcess = (Process) ioQueue.removeNext();
+
+        gui.setIoActive(currentProcess); // gui
+
+        return currentProcess;
 
     }
 
-    public void stopIO(long clock) {
+    public Process stopIO(long clock) {
+        gui.setIoActive(null); // gui
 
-        if (!this.ioQueue.isEmpty()){
-            this.currentProcess = (Process) this.ioQueue.removeNext();
-        }
-        else {
-            this.currentProcess = null;
-        }
-
-        this.gui.setIoActive(this.currentProcess);
+        Process temp = currentProcess;
+        currentProcess = null;
+        return temp;
     }
 
 
@@ -66,8 +57,17 @@ public class IO {
         return currentProcess;
     }
 
+    public boolean isIdle() {
+        return (this.currentProcess == null);
+    }
+
+
+    public void insertQueue(Process process) {
+        ioQueue.insert(process);
+    }
+
     public long getRandomIoTime(){
-        return (long) (Math.random()*(timeAvg+0.5*timeAvg));
+        return (long) (Math.random()*(avgTime+0.5*avgTime));
     }
 
 }

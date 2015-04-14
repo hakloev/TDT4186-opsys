@@ -53,7 +53,7 @@ public class Simulator implements Constants
 		// Add code as needed
         this.maxCpuTime = maxCpuTime;
         cpu = new CPU(cpuQueue, statistics, gui);
-        io = new IO(ioQueue, statistics,gui,eventQueue,avgIoTime);
+        io = new IO(ioQueue, statistics,gui,avgIoTime);
 
     }
 
@@ -204,11 +204,22 @@ public class Simulator implements Constants
 	 */
 	private void processIoRequest() {
 
-        Process process = cpu.getCurrentProcess();
-        System.out.println("-- [DEBUG][PID: " + process.getProcessId() +"] Processing IO-Request");
 
-		this.io.runIO(process, clock);
-		//switchProcess();
+		Process process = cpu.stopProcess();
+		io.insertQueue(process);
+
+		//process.updateProcess(IO_QUEUE);
+
+		// IO idle check
+		if (io.isIdle()) {
+			process = io.runIO();
+			if (process != null) {
+				//process.updateProcess(IO_ACTIVE);
+				eventQueue.insertEvent(new Event(END_IO, clock + io.getRandomIoTime()));
+			}
+		}
+
+		this.pushProcessOnToCpuAndCreateNewEvent();
 
 	}
 
@@ -230,13 +241,13 @@ public class Simulator implements Constants
         if (currentProcess != null) {
             System.out.println("-- [DEBUG][PID: " + currentProcess.getProcessId() + "] "
                     + maxCpuTime + " | "
-                    + currentProcess.getCpuTimeNeeded() + " | "
+					+ currentProcess.getCpuTimeNeeded() + " | "
                     + currentProcess.getTimeToNextIoOperation());
             if ((maxCpuTime < currentProcess.getCpuTimeNeeded()) && (maxCpuTime < currentProcess.getTimeToNextIoOperation())) {
                 eventQueue.insertEvent(new Event(SWITCH_PROCESS, maxCpuTime));
-                System.out.println("-- [DEBUG] Created SWITCH_PROCESS of process");
+				System.out.println("-- [DEBUG] Created SWITCH_PROCESS of process");
             } else if ((currentProcess.getCpuTimeNeeded() < maxCpuTime) && (currentProcess.getCpuTimeNeeded() < currentProcess.getTimeToNextIoOperation())) {
-                eventQueue.insertEvent(new Event(END_PROCESS, currentProcess.getCpuTimeNeeded()));
+				eventQueue.insertEvent(new Event(END_PROCESS, currentProcess.getCpuTimeNeeded()));
                 System.out.println("-- [DEBUG] Created END_PROCESS of process");
             } else {
                 eventQueue.insertEvent(new Event(IO_REQUEST, currentProcess.getTimeToNextIoOperation()));
