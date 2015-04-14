@@ -180,7 +180,7 @@ public class Simulator implements Constants
 	 */
 	private void processIoRequest() {
 		Process process = cpu.getCurrentProcess();
-		
+
 
 	}
 
