@@ -183,6 +183,7 @@ public class Simulator implements Constants
         // legge inn en ny i cpu, fra første posisjon i cpu queue
         // TODO: needs stats
         Process oldProcess = cpu.stopProcess();
+        oldProcess.updateCpuTime(clock);
         cpu.addProcess(oldProcess);
 
         pushProcessOnToCpuAndCreateNewEvent();
@@ -202,7 +203,8 @@ public class Simulator implements Constants
 	 * perform an I/O operation.
 	 */
 	private void processIoRequest() {
-		Process process = cpu.getCurrentProcess();
+        Process process = cpu.getCurrentProcess();
+        System.out.println("-- [DEBUG][PID: " + process.getProcessId() +"] Processing IO-Request");
 
 		this.io.runIO(process, clock);
 		//switchProcess();
@@ -225,17 +227,19 @@ public class Simulator implements Constants
         System.out.println("-- [DEBUG] Starting CPU process and creating new event based on clock");
         Process currentProcess = cpu.loadProcess();
         if (currentProcess != null) {
-            currentProcess.updateCpuTime(clock);
             System.out.println("-- [DEBUG][PID: " + currentProcess.getProcessId() + "] "
                     + maxCpuTime + " | "
                     + currentProcess.getCpuTimeNeeded() + " | "
                     + currentProcess.getTimeToNextIoOperation());
             if ((maxCpuTime < currentProcess.getCpuTimeNeeded()) && (maxCpuTime < currentProcess.getTimeToNextIoOperation())) {
                 eventQueue.insertEvent(new Event(SWITCH_PROCESS, maxCpuTime));
+                System.out.println("-- [DEBUG] Created SWITCH_PROCESS of process");
             } else if ((currentProcess.getCpuTimeNeeded() < maxCpuTime) && (currentProcess.getCpuTimeNeeded() < currentProcess.getTimeToNextIoOperation())) {
                 eventQueue.insertEvent(new Event(END_PROCESS, currentProcess.getCpuTimeNeeded()));
+                System.out.println("-- [DEBUG] Created END_PROCESS of process");
             } else {
                 eventQueue.insertEvent(new Event(IO_REQUEST, currentProcess.getTimeToNextIoOperation()));
+                System.out.println("-- [DEBUG] Created IO_PROCESS of process");
             }
         } else {
             System.out.println("-- [DEBUG] There is no process on the CPU queue");

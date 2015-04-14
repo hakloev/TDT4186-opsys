@@ -34,6 +34,7 @@ public class IO {
     // Does not change the clock time, needs to calcucate the time left in IO and add it to the event in the eventQueue
 
     public void runIO(Process p, long clock) {
+        System.out.println("-- [DEBUG][PID: " +p.getProcessId() + "] Run IO");
         if (this.currentProcess == null) {
             this.currentProcess = p;
             gui.setIoActive(p);

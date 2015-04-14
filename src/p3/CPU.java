@@ -20,13 +20,12 @@ public class CPU {
         cpuQueue.insert(process);
     }
     public Process getCurrentProcess() {
-        System.out.println("-- [DEBUG][PID: " + currentProcess.getProcessId() + "] Returning current process from CPU");
+        System.out.println("-- [DEBUG][PID: " + currentProcess.getProcessId() + "] Someone is requesting current process from CPU");
         return currentProcess;
     }
 
     public Process loadProcess() {
-        currentProcess = (Process) cpuQueue.getNext();
-        cpuQueue.removeNext();
+        currentProcess = (Process) cpuQueue.removeNext();
         gui.setCpuActive(currentProcess);
         System.out.println("-- [DEBUG][PID: " + currentProcess.getProcessId() + " ] Loading process from CPU queue into CPU");
         return currentProcess;
