@@ -33,9 +33,7 @@ public class CPU {
     */
 
     public boolean isIdle() {
-            if (currentProcess == null) { return true; }
-        return true;
-    }
+            return (currentProcess == null);
 
 
     /**
