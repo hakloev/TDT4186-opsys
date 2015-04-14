@@ -6,15 +6,16 @@ public class IO {
 
     private Queue ioQueue;
     private Statistics stats;
-    private long IOTime;
     private Gui gui;
+    private Process currentProcess = null;
+    private EventQueue eventQueue;
 
 
-    public IO(Queue ioQueue, Statistics stats, long IOTime, Gui gui) {
+    public IO(Queue ioQueue, Statistics stats, Gui gui, EventQueue eventQueue) {
         this.ioQueue = ioQueue;
         this.stats = stats;
-        this.IOTime = IOTime;
         this.gui = gui;
+        this.eventQueue = eventQueue;
     }
 
 
@@ -28,6 +29,37 @@ public class IO {
         if (ioQueue.getQueueLength() > stats.memoryQueueLargestLength) {
             stats.memoryQueueLargestLength = ioQueue.getQueueLength();
         }
+    }
+
+    // Does not change the clock time, needs to calcucate the time left in IO and add it to the event in the eventQueue
+
+    public void runIO(Process p, long clock) {
+        if (this.currentProcess == null) {
+            this.currentProcess = p;
+            gui.setIoActive(p);
+        }
+        else {
+            this.ioQueue.insert(p);
+        }
+
+        eventQueue.insertEvent(new Event(Constants.END_IO,clock));
+
+    }
+
+    public void stopIO(long clock) {
+        if (!this.ioQueue.isEmpty()){
+            this.currentProcess = (Process) this.ioQueue.removeNext();
+        }
+        else {
+            this.currentProcess = null;
+        }
+
+        this.gui.setIoActive(this.currentProcess);
+    }
+
+
+    public Process getCurrentProcess() {
+        return currentProcess;
     }
 
 }

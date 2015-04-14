@@ -48,7 +48,7 @@ public class Simulator implements Constants
 		clock = 0;
 		// Add code as needed
         cpu = new CPU(cpuQueue, statistics, gui);
-        io = new IO(ioQueue, statistics);
+        io = new IO(ioQueue, statistics,gui,eventQueue);
 
     }
 
@@ -183,6 +183,8 @@ public class Simulator implements Constants
 	private void processIoRequest() {
 		Process process = cpu.getCurrentProcess();
 
+		this.io.runIO(process, clock);
+		switchProcess();
 
 	}
 
@@ -192,6 +194,10 @@ public class Simulator implements Constants
 	 */
 	private void endIoOperation() {
 		// Incomplete
+		Process process = this.io.getCurrentProcess();
+		this.io.stopIO(clock);
+		this.cpu.addProcess(process);
+
 	}
 
 	/**
