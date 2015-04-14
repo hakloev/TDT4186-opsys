@@ -1,4 +1,7 @@
 package p3;
+
+import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
+
 /**
  * Created by berg on 13/04/15.
  */
@@ -35,19 +38,18 @@ public class IO {
         if (ioQueue.isEmpty()) {
             currentProcess = null;
         }
-
-        currentProcess = (Process) ioQueue.removeNext();
-
-
+        else {
+            currentProcess = (Process) ioQueue.removeNext();
+            System.out.println("PID: " + currentProcess.getProcessId() + " in IO");
+        }
         gui.setIoActive(currentProcess); // gui
-        System.out.println("-- [DEBUG] END_IO Event created");
-
 
         return currentProcess;
 
+
     }
 
-    public Process stopIO(long clock) {
+    public Process stopIO() {
         gui.setIoActive(null); // gui
 
         Process temp = currentProcess;
@@ -68,12 +70,4 @@ public class IO {
     public void insertQueue(Process process) {
         ioQueue.insert(process);
     }
-
-    public long getRandomIoTime() {
-        long rand = (long) (2 * Math.random() * avgTime);
-        long result = 1 + rand;
-
-        return result;
-    }
-
 }

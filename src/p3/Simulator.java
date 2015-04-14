@@ -82,6 +82,7 @@ public class Simulator implements Constants
 			// Let the memory unit and the GUI know that time has passed
             memory.timePassed(timeDifference);
 			gui.timePassed(timeDifference);
+            System.out.println("derp " + timeDifference);
             // Add time passed to our units, CPU and IO
             cpu.timePassed(timeDifference);
             io.timePassed(timeDifference);
@@ -217,7 +218,7 @@ public class Simulator implements Constants
 			process = io.runIO();
 			if (process != null) {
 				//process.updateProcess(IO_ACTIVE);
-				eventQueue.insertEvent(new Event(END_IO, clock + io.getRandomIoTime()));
+				eventQueue.insertEvent(new Event(END_IO, clock + process.getTimeToNextIoOperation()));
 			}
 		}
 
@@ -234,10 +235,17 @@ public class Simulator implements Constants
 	 */
 	private void endIoOperation() {
 		// Incomplete
-		Process process = this.io.getCurrentProcess();
-        process.updateIOTime(clock);
-		this.io.stopIO(clock);
-		this.cpu.addProcess(process);
+		Process p = io.stopIO();
+        p.updateIOTime(clock);
+        cpu.addProcess(p);
+        if (cpu.isIdle()) {
+            pushProcessOnToCpuAndCreateNewEvent();
+        }
+        Process process = io.runIO();
+        if (process != null) {
+            eventQueue.insertEvent(new Event(END_IO, clock + process.getTimeToNextIoOperation()));
+        }
+
 
 	}
 

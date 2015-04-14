@@ -69,7 +69,6 @@ public class Process implements Constants
 		int green = 64+(int)((processId*47)%128);
 		int blue = 64+(int)((processId*53)%128);
 		color = new Color(red, green, blue);
-        timeToNextIoOperation = (long) (2 * Math.random() * avgIoInterval);
 	}
 
 	/**
@@ -125,7 +124,10 @@ public class Process implements Constants
         return cpuTimeNeeded;
     }
 
-    public long getTimeToNextIoOperation() { return timeToNextIoOperation; }
+    public long getTimeToNextIoOperation() {
+        timeToNextIoOperation = (long) (2 * Math.random() * avgIoInterval);
+        return timeToNextIoOperation;
+    }
 
     public long getProcessId() {
         return processId;
@@ -137,7 +139,7 @@ public class Process implements Constants
     public void updateCpuTime(Long clock) {
         long timeUsed = clock - this.timeOfLastEvent;
         timeOfLastEvent = timeUsed;
-        cpuTimeNeeded -= cpuTimeNeeded + timeUsed;
+        cpuTimeNeeded -= timeUsed;
     }
     /**
      * Updates the IO time left on this operation, based on how much time it has already used processing in IO
@@ -145,7 +147,7 @@ public class Process implements Constants
     public void updateIOTime(Long clock) {
         long timeUsed = clock - this.timeOfLastEvent;
         timeOfLastEvent = timeUsed;
-        timeSpentInIo += timeSpentInIo + timeUsed;
+        timeSpentInIo += timeUsed;
     }
 
 	public void enteredIOQueue() {
