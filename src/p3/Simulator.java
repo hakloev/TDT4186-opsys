@@ -225,7 +225,7 @@ public class Simulator implements Constants
         System.out.println("-- [DEBUG] Starting CPU process and creating new event based on clock");
         Process currentProcess = cpu.loadProcess();
         if (currentProcess != null) {
-            currentProcess.updateCpuTime();
+            currentProcess.updateCpuTime(clock);
             System.out.println("-- [DEBUG][PID: " + currentProcess.getProcessId() + "] "
                     + maxCpuTime + " | "
                     + currentProcess.getCpuTimeNeeded() + " | "
