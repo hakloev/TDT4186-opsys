@@ -145,7 +145,6 @@ public class Simulator implements Constants
 			// we let the process leave the system immediately, for now.
 
 
-
 			// Try to use the freed memory:
 			flushMemoryQueue();
 			// Update statistics

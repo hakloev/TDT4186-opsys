@@ -6,6 +6,7 @@ public class CPU {
 
     private Queue cpuQueue;
     private Statistics stats;
+    private Process currentProcess = null;
 
     public CPU(Queue cpuQueue, Statistics stats) {
         this.cpuQueue = cpuQueue;
@@ -15,13 +16,22 @@ public class CPU {
     public void addProcess(Process process) {
         cpuQueue.insert(process);
     }
+
+    
+    /*
     public void work() {
-        Process currentElement = (Process) cpuQueue.getNext();
+        currentProcess = (Process) cpuQueue.getNext();
 
         //Prosessere event, dette tar x tid, basert på cpuTimeNeeded i process klassen.
         //Sjekke om shit skal ha IO, sende til IO. Når IO er ferdig, dytt elementet bakerst i CPU køen.
         //Oppdatere stats
         stats.nofCompletedProcesses += 1;
         cpuQueue.removeNext();
+        currentProcess = null;
+    }
+    */
+    public boolean isIdle() {
+            if (currentProcess == null) { return true; }
+        return true;
     }
 }
