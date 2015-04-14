@@ -53,7 +53,7 @@ public class Simulator implements Constants
 		// Add code as needed
         this.maxCpuTime = maxCpuTime;
         cpu = new CPU(cpuQueue, statistics, gui);
-        io = new IO(ioQueue, statistics, avgIoTime, gui);
+        io = new IO(ioQueue, statistics,gui,eventQueue);
 
     }
 
@@ -178,6 +178,7 @@ public class Simulator implements Constants
 	 * Simulates a process switch.
 	 */
 	private void switchProcess() {
+        System.out.println("-- [DEBUG] Switching CPU process");
         // fjerne er i cpu nå, og legge i cpu queue,
         // legge inn en ny i cpu, fra første posisjon i cpu queue
         // TODO: needs stats
@@ -203,6 +204,8 @@ public class Simulator implements Constants
 	private void processIoRequest() {
 		Process process = cpu.getCurrentProcess();
 
+		this.io.runIO(process, clock);
+		//switchProcess();
 
 	}
 
@@ -212,6 +215,10 @@ public class Simulator implements Constants
 	 */
 	private void endIoOperation() {
 		// Incomplete
+		Process process = this.io.getCurrentProcess();
+		this.io.stopIO(clock);
+		this.cpu.addProcess(process);
+
 	}
 
     private void pushProcessOnToCpuAndCreateNewEvent() {
