@@ -179,7 +179,9 @@ public class Simulator implements Constants
 	 * perform an I/O operation.
 	 */
 	private void processIoRequest() {
-		// Incomplete
+		Process process = cpu.getCurrentProcess();
+		
+
 	}
 
 	/**

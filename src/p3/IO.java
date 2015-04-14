@@ -6,10 +6,15 @@ public class IO {
 
     private Queue ioQueue;
     private Statistics stats;
+    private long IOTime;
+    private Gui gui;
 
-    public IO(Queue ioQueue, Statistics stats) {
+
+    public IO(Queue ioQueue, Statistics stats, long IOTime, Gui gui) {
         this.ioQueue = ioQueue;
         this.stats = stats;
+        this.IOTime = IOTime;
+        this.gui = gui;
     }
 
 
