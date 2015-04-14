@@ -40,7 +40,7 @@ public class IO {
         }
         else {
             currentProcess = (Process) ioQueue.removeNext();
-            System.out.println("PID: " + currentProcess.getProcessId() + " in IO");
+            System.out.println("-- [DEBUG][PID: " + currentProcess.getProcessId() + "] Fetching IO");
         }
         gui.setIoActive(currentProcess); // gui
 
@@ -53,6 +53,7 @@ public class IO {
         gui.setIoActive(null); // gui
 
         Process temp = currentProcess;
+        System.out.println("-- [DEBUG][PID: " + currentProcess.getProcessId() + "] Ending IO");
         currentProcess = null;
         return temp;
     }

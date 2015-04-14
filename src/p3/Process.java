@@ -140,6 +140,9 @@ public class Process implements Constants
         long timeUsed = clock - this.timeOfLastEvent;
         timeOfLastEvent = timeUsed;
         cpuTimeNeeded -= timeUsed;
+        if (cpuTimeNeeded < 0) {
+            cpuTimeNeeded = 0;
+        }
     }
     /**
      * Updates the IO time left on this operation, based on how much time it has already used processing in IO

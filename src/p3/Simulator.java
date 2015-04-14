@@ -23,6 +23,7 @@ public class Simulator implements Constants
 	// Add member variables as needed
 
     private long maxCpuTime;
+    private long avgIoTime;
 
     private CPU cpu;
     private IO io;
@@ -54,6 +55,7 @@ public class Simulator implements Constants
         this.maxCpuTime = maxCpuTime;
         cpu = new CPU(cpuQueue, statistics, gui);
         io = new IO(ioQueue, statistics,gui,avgIoTime);
+        this.avgIoTime = avgIoTime;
 
     }
 
@@ -71,18 +73,18 @@ public class Simulator implements Constants
 
 		// Process events until the simulation length is exceeded:
 		while (clock < simulationLength && !eventQueue.isEmpty()) {
-            System.out.println("-- [DEBUG] Executing next event in main while loop");
             // Find the next event
 			Event event = eventQueue.getNextEvent();
-			// Find out how much time that passed...
+            System.out.println("-- [DEBUG][MAIN] Current event type " + event.getType() + " and time: " + event.getTime());
+            // Find out how much time that passed...
 			long timeDifference = event.getTime()-clock;
 			// ...and update the clock.
 			clock = event.getTime();
+            System.out.println("-- [DEBUG][MAIN] Current system clock: " + clock);
 
 			// Let the memory unit and the GUI know that time has passed
             memory.timePassed(timeDifference);
 			gui.timePassed(timeDifference);
-            System.out.println("derp " + timeDifference);
             // Add time passed to our units, CPU and IO
             cpu.timePassed(timeDifference);
             io.timePassed(timeDifference);
@@ -94,7 +96,7 @@ public class Simulator implements Constants
 
 			// Note that the processing of most events should lead to new
 			// events being added to the event queue!
-            System.out.println("-- [DEBUG] One iteration of main while loop completed");
+            System.out.println("-- [DEBUG][MAIN] One iteration of main while loop completed\n");
 
 		}
 		System.out.println("..done.");
@@ -108,7 +110,6 @@ public class Simulator implements Constants
 	 * @param event	The event to be processed.
 	 */
 	private void processEvent(Event event) {
-        System.out.println("-- [DEBUG] Processing event with type: " + event.getType());
         switch (event.getType()) {
 			case NEW_PROCESS:
 				createProcess();
@@ -133,7 +134,6 @@ public class Simulator implements Constants
 	 * memory for the processes.
 	 */
 	private void flushMemoryQueue() {
-        System.out.println("-- [DEBUG] Flushing memory queue");
         Process p = memory.checkMemory(clock);
 		// As long as there is enough memory, processes are moved from the memory queue to the cpu queue
 		while(p != null) {
@@ -159,9 +159,9 @@ public class Simulator implements Constants
      */
     private void createProcess() {
         // Create a new process
-        System.out.println("-- [DEBUG] Creating new process due to NEW_PROCESS event");
         Process newProcess = new Process(memory.getMemorySize(), clock);
         memory.insertProcess(newProcess);
+        System.out.println("-- [DEBUG][PID: " + newProcess.getProcessId() + "] New process added to memory");
         flushMemoryQueue();
 
         if (cpu.isIdle()) {
@@ -179,13 +179,13 @@ public class Simulator implements Constants
 	 * Simulates a process switch.
 	 */
 	private void switchProcess() {
-        System.out.println("-- [DEBUG] Switching CPU process");
         // fjerne er i cpu nå, og legge i cpu queue,
         // legge inn en ny i cpu, fra første posisjon i cpu queue
         // TODO: needs stats
         Process oldProcess = cpu.stopProcess();
         oldProcess.updateCpuTime(clock);
         cpu.addProcess(oldProcess);
+        System.out.println("-- [DEBUG][PID: " + oldProcess.getProcessId() + "] Removing from CPU");
 
         pushProcessOnToCpuAndCreateNewEvent();
 
@@ -196,6 +196,8 @@ public class Simulator implements Constants
 	 */
 	private void endProcess() {
         Process p = cpu.stopProcess();
+        p.updateCpuTime(clock);
+        System.out.println("-- [DEBUG][PID: " + p.getProcessId() + "] Ending process and deallocating memory");
         memory.processCompleted(p);
         pushProcessOnToCpuAndCreateNewEvent();
 
@@ -214,18 +216,18 @@ public class Simulator implements Constants
 		//process.updateProcess(IO_QUEUE);
 
 		// IO idle check
-		if (io.isIdle()) {
+
+        if (io.isIdle()) {
 			process = io.runIO();
 			if (process != null) {
 				//process.updateProcess(IO_ACTIVE);
-				eventQueue.insertEvent(new Event(END_IO, clock + process.getTimeToNextIoOperation()));
+                System.out.println("-- [DEBUG][PROCESS-IO][PID: " + process.getProcessId() + "] Created END_IO of process");
+                eventQueue.insertEvent(new Event(END_IO, clock + 1 + (long)(2*Math.random()*avgIoTime)));
 			}
 		}
 
+
 		this.pushProcessOnToCpuAndCreateNewEvent();
-
-        System.out.println("-- [DEBUG][PID: " + process.getProcessId() +"] Processing IO-Request");
-
 
 	}
 
@@ -238,37 +240,39 @@ public class Simulator implements Constants
 		Process p = io.stopIO();
         p.updateIOTime(clock);
         cpu.addProcess(p);
+
         if (cpu.isIdle()) {
             pushProcessOnToCpuAndCreateNewEvent();
         }
+
         Process process = io.runIO();
         if (process != null) {
-            eventQueue.insertEvent(new Event(END_IO, clock + process.getTimeToNextIoOperation()));
+            System.out.println("-- [DEBUG][END-IO][PID: " + process.getProcessId() + "] Created END_IO of process");
+            eventQueue.insertEvent(new Event(END_IO, clock + 1 + (long)(2*Math.random()*avgIoTime)));
         }
 
 
 	}
 
     private void pushProcessOnToCpuAndCreateNewEvent() {
-        System.out.println("-- [DEBUG] Starting CPU process and creating new event based on clock");
         Process currentProcess = cpu.loadProcess();
         if (currentProcess != null) {
-            System.out.println("-- [DEBUG][PID: " + currentProcess.getProcessId() + "] "
+            System.out.println("-- [DEBUG][PID: " + currentProcess.getProcessId() + "] Pushing process onto CPU and create event | "
                     + maxCpuTime + " | "
-					+ currentProcess.getCpuTimeNeeded() + " | "
+                    + currentProcess.getCpuTimeNeeded() + " | "
                     + currentProcess.getTimeToNextIoOperation());
-            if ((maxCpuTime < currentProcess.getCpuTimeNeeded()) && (maxCpuTime < currentProcess.getTimeToNextIoOperation())) {
-                eventQueue.insertEvent(new Event(SWITCH_PROCESS, maxCpuTime));
-				System.out.println("-- [DEBUG] Created SWITCH_PROCESS of process");
-            } else if ((currentProcess.getCpuTimeNeeded() < maxCpuTime) && (currentProcess.getCpuTimeNeeded() < currentProcess.getTimeToNextIoOperation())) {
-				eventQueue.insertEvent(new Event(END_PROCESS, currentProcess.getCpuTimeNeeded()));
-                System.out.println("-- [DEBUG] Created END_PROCESS of process");
+            if ((currentProcess.getCpuTimeNeeded() < maxCpuTime) && (currentProcess.getCpuTimeNeeded() < currentProcess.getTimeToNextIoOperation())) {
+                eventQueue.insertEvent(new Event(END_PROCESS, clock + currentProcess.getCpuTimeNeeded()));
+                System.out.println("-- [DEBUG][PID: " + currentProcess.getProcessId() + "] Created END_PROCESS of process");
+            } else if ((maxCpuTime < currentProcess.getCpuTimeNeeded()) && (maxCpuTime < currentProcess.getTimeToNextIoOperation())) {
+                eventQueue.insertEvent(new Event(SWITCH_PROCESS, clock + maxCpuTime));
+                System.out.println("-- [DEBUG][PID: " + currentProcess.getProcessId() + "] Created SWITCH_PROCESS of process");
             } else {
-                eventQueue.insertEvent(new Event(IO_REQUEST, currentProcess.getTimeToNextIoOperation()));
-                System.out.println("-- [DEBUG] Created IO_PROCESS of process");
+                eventQueue.insertEvent(new Event(IO_REQUEST, clock + currentProcess.getTimeToNextIoOperation()));
+                System.out.println("-- [DEBUG][PID: " + currentProcess.getProcessId() + "] Created IO_PROCESS of process");
             }
         } else {
-            System.out.println("-- [DEBUG] There is no process on the CPU queue");
+            System.out.println("-- [DEBUG][PUSH] There is no process on the CPU queue");
         }
     }
 
@@ -295,7 +299,7 @@ public class Simulator implements Constants
 	 */
 	public static void main(String args[]) {
         if (debug) {
-            SimulationGui gui = new SimulationGui(2048, 500, 225, 250000, 5000);
+            SimulationGui gui = new SimulationGui(2048, 100, 225, 250000, 5000);
         } else {
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             System.out.println("Please input system parameters: ");
