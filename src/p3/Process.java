@@ -124,14 +124,27 @@ public class Process implements Constants
         return cpuTimeNeeded;
     }
 
+    public long getTimeToNextIoOperation() { return timeToNextIoOperation; }
+
     public long getProcessId() {
         return processId;
-
     }
-    public void updateTime() {
-        long currentTime = System.currentTimeMillis() - this.timeOfLastEvent;
-        timeOfLastEvent = currentTime;
-        cpuTimeNeeded -= cpuTimeNeeded + currentTime;
+
+    /**
+     * Updates the cpu time left on this operation, based on how much time it has already used processing
+     */
+    public void updateCpuTime(Long clock) {
+        long timeUsed = clock - this.timeOfLastEvent;
+        timeOfLastEvent = timeUsed;
+        cpuTimeNeeded -= cpuTimeNeeded + timeUsed;
+    }
+    /**
+     * Updates the IO time left on this operation, based on how much time it has already used processing in IO
+     */
+    public void updateIOTime(Long clock) {
+        long timeUsed = clock - this.timeOfLastEvent;
+        timeOfLastEvent = timeUsed;
+        timeSpentInIo += timeSpentInIo + timeUsed;
     }
 
 	public void enteredIOQueue() {
