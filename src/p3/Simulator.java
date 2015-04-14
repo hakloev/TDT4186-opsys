@@ -53,7 +53,7 @@ public class Simulator implements Constants
 		// Add code as needed
         this.maxCpuTime = maxCpuTime;
         cpu = new CPU(cpuQueue, statistics, gui);
-        io = new IO(ioQueue, statistics,gui,eventQueue);
+        io = new IO(ioQueue, statistics,gui,eventQueue,avgIoTime);
 
     }
 
@@ -202,6 +202,7 @@ public class Simulator implements Constants
 	 * perform an I/O operation.
 	 */
 	private void processIoRequest() {
+
 		Process process = cpu.getCurrentProcess();
 
 		this.io.runIO(process, clock);

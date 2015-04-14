@@ -134,5 +134,14 @@ public class Process implements Constants
         cpuTimeNeeded -= cpuTimeNeeded + currentTime;
     }
 
+	public void enteredIOQueue() {
+
+	}
+
+	public void leftIoQueue() {
+
+	}
+
+
 	// Add more methods as needed
 }
