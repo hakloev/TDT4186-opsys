@@ -4,13 +4,11 @@ package p3;
  */
 public class CPU {
 
-    Queue cpuQueue;
-    Queue IOQueue;
-    Statistics stats;
+    private Queue cpuQueue;
+    private Statistics stats;
 
-    public CPU(Queue cpuQueue, Queue IOQueue, Statistics stats) {
+    public CPU(Queue cpuQueue, Statistics stats) {
         this.cpuQueue = cpuQueue;
-        this.IOQueue = IOQueue;
         this.stats = stats;
 
     }

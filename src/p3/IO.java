@@ -4,10 +4,13 @@ package p3;
  */
 public class IO {
 
-    Queue IOQueue;
+    private Queue IOQueue;
+    private Statistics stats;
 
-    public IO(Queue IOQueue) {
-
+    public IO(Queue IOQueue, Statistics stats) {
         this.IOQueue = IOQueue;
+        this.stats = stats;
     }
+
+
 }
