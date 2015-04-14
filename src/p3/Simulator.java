@@ -1,5 +1,3 @@
-package p3;
-
 import java.io.*;
 
 /**
@@ -23,6 +21,8 @@ public class Simulator implements Constants
 	private long avgArrivalInterval;
 	// Add member variables as needed
 
+    CPU cpu;
+
 	/**
 	 * Constructs a scheduling simulator with the given parameters.
 	 * @param memoryQueue			The memory queue to be used.
@@ -45,6 +45,8 @@ public class Simulator implements Constants
 		memory = new Memory(memoryQueue, memorySize, statistics);
 		clock = 0;
 		// Add code as needed
+        cpu = new CPU(cpuQueue, ioQueue, statistics);
+
     }
 
     /**
@@ -58,6 +60,7 @@ public class Simulator implements Constants
 		System.out.print("Simulating...");
 		// Genererate the first process arrival event
 		eventQueue.insertEvent(new Event(NEW_PROCESS, 0));
+
 		// Process events until the simulation length is exceeded:
 		while (clock < simulationLength && !eventQueue.isEmpty()) {
 			// Find the next event
@@ -134,10 +137,12 @@ public class Simulator implements Constants
 			
 			// TODO: Add this process to the CPU queue!
 			// Also add new events to the event queue if needed
-
+            cpu.addProcess(p);
 			// Since we haven't implemented the CPU and I/O device yet,
 			// we let the process leave the system immediately, for now.
-			memory.processCompleted(p);
+
+
+
 			// Try to use the freed memory:
 			flushMemoryQueue();
 			// Update statistics
@@ -159,7 +164,7 @@ public class Simulator implements Constants
 	 * Ends the active process, and deallocates any resources allocated to it.
 	 */
 	private void endProcess() {
-		// Incomplete
+
 	}
 
 	/**

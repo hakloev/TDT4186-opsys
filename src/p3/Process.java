@@ -1,5 +1,3 @@
-package p3;
-
 import java.awt.*;
 import java.util.*;
 
@@ -118,6 +116,10 @@ public class Process implements Constants
 		statistics.totalTimeSpentWaitingForMemory += timeSpentWaitingForMemory;
 		statistics.nofCompletedProcesses++;
 	}
+
+    public long getCpuTimeNeeded() {
+        return cpuTimeNeeded;
+    }
 
 	// Add more methods as needed
 }
