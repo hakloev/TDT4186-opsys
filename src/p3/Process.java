@@ -122,5 +122,15 @@ public class Process implements Constants
         return cpuTimeNeeded;
     }
 
+    public long getCpuTimeLeft() {
+
+    }
+
+    public void updateTime() {
+        long currentTime = System.currentTimeMillis() - this.timeOfLastEvent;
+        timeOfLastEvent = currentTime;
+        cpuTimeNeeded -= cpuTimeNeeded + currentTime;
+    }
+
 	// Add more methods as needed
 }
