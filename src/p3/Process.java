@@ -69,6 +69,7 @@ public class Process implements Constants
 		int green = 64+(int)((processId*47)%128);
 		int blue = 64+(int)((processId*53)%128);
 		color = new Color(red, green, blue);
+        timeToNextIoOperation = avgIoInterval;
 	}
 
 	/**

@@ -43,6 +43,7 @@ public class IO {
             this.ioQueue.insert(p);
         }
 
+        System.out.println("-- [DEBUG] END_IO Event created");
         eventQueue.insertEvent(new Event(Constants.END_IO,clock));
 
     }

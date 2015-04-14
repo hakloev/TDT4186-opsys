@@ -203,9 +203,9 @@ public class Simulator implements Constants
 	 * perform an I/O operation.
 	 */
 	private void processIoRequest() {
-        Process process = cpu.getCurrentProcess();
+        Process process = cpu.stopProcess();
         System.out.println("-- [DEBUG][PID: " + process.getProcessId() +"] Processing IO-Request");
-
+        pushProcessOnToCpuAndCreateNewEvent();
 		this.io.runIO(process, clock);
 		//switchProcess();
 
