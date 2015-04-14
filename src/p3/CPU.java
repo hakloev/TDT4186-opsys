@@ -33,8 +33,8 @@ public class CPU {
     */
 
     public boolean isIdle() {
-            return (currentProcess == null);
-
+        return (currentProcess == null);
+    }
 
     /**
      * This method is called when a discrete amount of time has passed.
