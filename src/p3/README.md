@@ -1,6 +1,6 @@
 
 
-## Operativsystemer øving P3
+# Operativsystemer øving P3
 Fredrik Berg, Håkon Løvdal, Truls Mørk Pettersen
 
 ### Logg av programkjøring, eksempel på statestikk
@@ -37,69 +37,15 @@ Fredrik Berg, Håkon Løvdal, Truls Mørk Pettersen
 
 ### Implementasjon
 
+Det er ikke gjort noen spesielle endringer i skjelletkoden som ble gitt for øvingen. Simulator har blitt utvidet og vi har implementert to klasser, IO og CPU.
 
-``` java
-public class CPU {
+**Simulator**
 
-   private Queue cpuQueue;
-   private Process currentProcess = null;
-   private Gui gui;
-   private long insertedTime;
 
-   public CPU(Queue cpuQueue, Gui gui) {
-       this.cpuQueue = cpuQueue;
-       this.gui = gui;
+**CPU**
 
-   }
-   public void addProcess(Process process) {
-       System.out.println("-- [DEBUG][PID: " + process.getProcessId() + "] Added process to CPU queue");
-       Statistics.avgTimesInCpuQueue += 1;
-       cpuQueue.insert(process);
-   }
-   public Process getCurrentProcess() {
-       System.out.println("-- [DEBUG][PID: " + currentProcess.getProcessId() + "] Someone is requesting the current process from CPU");
-       return currentProcess;
-   }
 
-   public Process loadProcess() {
-       if (cpuQueue.isEmpty()) {
-           return null;
-       }
-       currentProcess = (Process) cpuQueue.removeNext();
-       gui.setCpuActive(currentProcess);
-       System.out.println("-- [DEBUG][PID: " + currentProcess.getProcessId() + "] Loading process from CPU queue into CPU");
-       return currentProcess;
-
-   }
-   public Process stopProcess() {
-       Process p = currentProcess;
-       System.out.println("-- [DEBUG][PID: " + currentProcess.getProcessId() + "] Stopping process in CPU");
-       currentProcess = null;
-       gui.setCpuActive(null);
-       return p;
-
-   }
-
-   public boolean isIdle() {
-       return (currentProcess == null);
-   }
-
-   /**
-    * This method is called when a discrete amount of time has passed.
-    * @param timePassed	The amount of time that has passed since the last call to this method.
-    */
-   public void timePassed(long timePassed) {
-       if (currentProcess == null) {
-           Statistics.cpuTimeSpentIdle += timePassed;
-       }
-       Statistics.cpuQueueLengthTime += cpuQueue.getQueueLength()*timePassed;
-       if (cpuQueue.getQueueLength() > Statistics.cpuQueueLargestLength) {
-           Statistics.cpuQueueLargestLength = cpuQueue.getQueueLength();
-       }
-   }
-}
-```
-
+**IO**
 
 
 
