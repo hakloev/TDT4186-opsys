@@ -53,8 +53,8 @@ public class Simulator implements Constants
 		clock = 0;
 		// Add code as needed
         this.maxCpuTime = maxCpuTime;
-        cpu = new CPU(cpuQueue, statistics, gui);
-        io = new IO(ioQueue, statistics,gui,avgIoTime);
+        cpu = new CPU(cpuQueue, gui);
+        io = new IO(ioQueue, gui, avgIoTime);
         this.avgIoTime = avgIoTime;
 
     }

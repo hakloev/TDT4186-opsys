@@ -19,18 +19,19 @@ public class Statistics
 	public long memoryQueueLargestLength = 0;
 
     // Our added stats:
-    public long nufIoOperations = 0;
-    public long nufForcedOperations = 0;
-    public long cpuQueueLengthTime = 0;
-    public long cpuQueueLargestLength = 0;
-    public long ioQueueLengthTime = 0;
-    public long ioQueueLargestLength = 0;
+    public static long nufIoOperations = 0;
+    public static long nufForcedOperations = 0;
+    public static long cpuQueueLengthTime = 0;
+    public static long cpuQueueLargestLength = 0;
+    public static long ioQueueLengthTime = 0;
+    public static long ioQueueLargestLength = 0;
     
 	/**
 	 * Prints out a report summarizing all collected data about the simulation.
 	 * @param simulationLength	The number of milliseconds that the simulation covered.
 	 */
-	public void printReport(long simulationLength) {
+
+    public void printReport(long simulationLength) {
 		System.out.println();
 		System.out.println("Simulation statistics:");
 		System.out.println();
@@ -38,9 +39,9 @@ public class Statistics
 		System.out.println("Number of created processes:                                  "+nofCreatedProcesses);
         System.out.println("Number of (forced) process switches:                          "+nufForcedOperations);
         System.out.println("Number of processed I/O operations:                           "+nufIoOperations);
-        System.out.println("Average throughput (processes per second):                    ");
+        System.out.println("Average throughput (processes per second):                    "+(float)nofCompletedProcesses/(simulationLength/1000));
         System.out.println();
-        System.out.println("Total CPU time spent processing:");
+        System.out.println("Total CPU time spent processing:                              "+(float)cpuQueueLengthTime/1000);
         System.out.println("Fraction of CPU time spent processing:");
         System.out.println("Total CPU time spent waiting:");
         System.out.println("Fraction of CPU time spent waiting:");

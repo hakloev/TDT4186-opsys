@@ -5,13 +5,11 @@ package p3;
 public class CPU {
 
     private Queue cpuQueue;
-    private Statistics stats;
     private Process currentProcess = null;
     private Gui gui;
 
-    public CPU(Queue cpuQueue, Statistics stats, Gui gui) {
+    public CPU(Queue cpuQueue, Gui gui) {
         this.cpuQueue = cpuQueue;
-        this.stats = stats;
         this.gui = gui;
 
     }
@@ -65,9 +63,9 @@ public class CPU {
      * @param timePassed	The amount of time that has passed since the last call to this method.
      */
     public void timePassed(long timePassed) {
-        stats.cpuQueueLengthTime += cpuQueue.getQueueLength()*timePassed;
-        if (cpuQueue.getQueueLength() > stats.cpuQueueLargestLength) {
-            stats.cpuQueueLargestLength = cpuQueue.getQueueLength();
+        Statistics.cpuQueueLengthTime += cpuQueue.getQueueLength()*timePassed;
+        if (cpuQueue.getQueueLength() > Statistics.cpuQueueLargestLength) {
+            Statistics.cpuQueueLargestLength = cpuQueue.getQueueLength();
         }
     }
 }

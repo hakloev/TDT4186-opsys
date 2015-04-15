@@ -8,14 +8,12 @@ import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
 public class IO {
 
     private Queue ioQueue;
-    private Statistics stats;
     private Gui gui;
     private Process currentProcess = null;
     private long avgTime;
 
-    public IO(Queue ioQueue, Statistics stats, Gui gui, long avgTime) {
+    public IO(Queue ioQueue, Gui gui, long avgTime) {
         this.ioQueue = ioQueue;
-        this.stats = stats;
         this.gui = gui;
         this.avgTime = avgTime;
     }
@@ -26,9 +24,9 @@ public class IO {
      * @param timePassed	The amount of time that has passed since the last call to this method.
      */
     public void timePassed(long timePassed) {
-        stats.ioQueueLengthTime += ioQueue.getQueueLength()*timePassed;
-        if (ioQueue.getQueueLength() > stats.ioQueueLargestLength) {
-            stats.ioQueueLargestLength = ioQueue.getQueueLength();
+        Statistics.ioQueueLengthTime += ioQueue.getQueueLength()*timePassed;
+        if (ioQueue.getQueueLength() > Statistics.ioQueueLargestLength) {
+            Statistics.ioQueueLargestLength = ioQueue.getQueueLength();
         }
     }
 
