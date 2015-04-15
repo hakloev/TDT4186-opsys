@@ -113,11 +113,9 @@ public class Process implements Constants
 	 * Updates the statistics collected by the given Statistic object, adding
 	 * data collected by this process. This method is called when the process
 	 * leaves the system.
-     * @param statistics	The Statistics object to be updated.
      */
-	public void updateStatistics(Statistics statistics) {
-		statistics.totalTimeSpentWaitingForMemory += timeSpentWaitingForMemory;
-		statistics.nofCompletedProcesses++;
+	public void updateStatistics() {
+		Statistics.totalTimeSpentWaitingForMemory += timeSpentWaitingForMemory;
 	}
     /**
     * Returns the total time needed of the current process

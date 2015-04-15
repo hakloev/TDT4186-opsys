@@ -147,7 +147,7 @@ public class Simulator implements Constants
 			// we let the process leave the system immediately, for now.
 
 			// Update statistics
-			p.updateStatistics(statistics);
+			p.updateStatistics();
 
 			// Check for more free memory
 			p = memory.checkMemory(clock);
@@ -172,7 +172,7 @@ public class Simulator implements Constants
         long nextArrivalTime = clock + 1 + (long)(2*Math.random()*avgArrivalInterval);
         eventQueue.insertEvent(new Event(NEW_PROCESS, nextArrivalTime));
         // Update statistics
-        statistics.nofCreatedProcesses++;
+        Statistics.nofCreatedProcesses++;
     }
 
 	/**
@@ -200,6 +200,7 @@ public class Simulator implements Constants
         System.out.println("-- [DEBUG][PID: " + p.getProcessId() + "] Ending process and deallocating memory");
         memory.processCompleted(p);
         Statistics.timeSpentInSystem += clock - p.getCreationTime();
+        Statistics.nofCompletedProcesses++;
         pushProcessOnToCpuAndCreateNewEvent();
 
 	}

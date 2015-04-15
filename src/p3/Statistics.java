@@ -8,15 +8,15 @@ package p3;
 public class Statistics
 {
 	/** The number of processes that have exited the system */
-	public long nofCompletedProcesses = 0;
+	public static long nofCompletedProcesses = 0;
 	/** The number of processes that have entered the system */
-	public long nofCreatedProcesses = 0;
+	public static long nofCreatedProcesses = 0;
 	/** The total time that all completed processes have spent waiting for memory */
-	public long totalTimeSpentWaitingForMemory = 0;
+	public static long totalTimeSpentWaitingForMemory = 0;
 	/** The time-weighted length of the memory queue, divide this number by the total time to get average queue length */
-	public long memoryQueueLengthTime = 0;
+	public static long memoryQueueLengthTime = 0;
 	/** The largest memory queue length that has occured */
-	public long memoryQueueLargestLength = 0;
+	public static long memoryQueueLargestLength = 0;
 
     // Our added stats:
     public static long nufIoOperations = 0;
