@@ -10,7 +10,7 @@
 ### Skjermbilde av kjøring
 
 
-###Implementasjon
+### Implementasjon
 
 #### Eksperimentering med round robin algoritme
 
