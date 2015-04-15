@@ -162,6 +162,7 @@ public class Process implements Constants
 	public void leftIoQueue() {
 
 	}
+    public long getCreationTime() { return creationTime; }
 
 
 	// Add more methods as needed

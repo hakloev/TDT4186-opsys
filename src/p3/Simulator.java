@@ -199,7 +199,9 @@ public class Simulator implements Constants
         p.updateCpuTime(clock);
         System.out.println("-- [DEBUG][PID: " + p.getProcessId() + "] Ending process and deallocating memory");
         memory.processCompleted(p);
+        Statistics.timeSpentInSystem += clock - p.getCreationTime();
         pushProcessOnToCpuAndCreateNewEvent();
+
 	}
 
 	/**
@@ -298,7 +300,7 @@ public class Simulator implements Constants
 	 */
 	public static void main(String args[]) {
         if (debug) {
-            SimulationGui gui = new SimulationGui(2048, 500, 225, 250000, 5000);
+            SimulationGui gui = new SimulationGui(2048, 500, 225, 250000, 1000);
         } else {
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             System.out.println("Please input system parameters: ");
