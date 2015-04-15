@@ -68,5 +68,6 @@ public class IO {
 
     public void insertQueue(Process process) {
         ioQueue.insert(process);
+        Statistics.avgTimesInIOQueue += 1;
     }
 }

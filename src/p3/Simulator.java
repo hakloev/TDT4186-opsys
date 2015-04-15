@@ -27,6 +27,7 @@ public class Simulator implements Constants
 
     private CPU cpu;
     private IO io;
+    private long timeSinceLastEvent = clock;
 
     private static boolean debug = true;
 
@@ -73,6 +74,7 @@ public class Simulator implements Constants
 
 		// Process events until the simulation length is exceeded:
 		while (clock < simulationLength && !eventQueue.isEmpty()) {
+
             // Find the next event
 			Event event = eventQueue.getNextEvent();
             System.out.println("-- [DEBUG][MAIN] Current event type " + event.getType() + " and time: " + event.getTime());

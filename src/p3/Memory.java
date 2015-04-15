@@ -41,6 +41,7 @@ public class Memory {
 	 */
 	public void insertProcess(Process p) {
 		memoryQueue.insert(p);
+        Statistics.avgTimesInMemoryQueue += 1;
 	}
 
     /**

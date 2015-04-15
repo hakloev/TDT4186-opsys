@@ -15,6 +15,7 @@ public class CPU {
     }
     public void addProcess(Process process) {
         System.out.println("-- [DEBUG][PID: " + process.getProcessId() + "] Added process to CPU queue");
+        Statistics.avgTimesInCpuQueue += 1;
         cpuQueue.insert(process);
     }
     public Process getCurrentProcess() {
@@ -40,19 +41,6 @@ public class CPU {
         return p;
 
     }
-    
-    /*
-    public void work() {
-        currentProcess = (Process) cpuQueue.getNext();
-
-        //Prosessere event, dette tar x tid, basert på cpuTimeNeeded i process klassen.
-        //Sjekke om shit skal ha IO, sende til IO. Når IO er ferdig, dytt elementet bakerst i CPU køen.
-        //Oppdatere stats
-        stats.nofCompletedProcesses += 1;
-        cpuQueue.removeNext();
-        currentProcess = null;
-    }
-    */
 
     public boolean isIdle() {
         return (currentProcess == null);
@@ -63,6 +51,9 @@ public class CPU {
      * @param timePassed	The amount of time that has passed since the last call to this method.
      */
     public void timePassed(long timePassed) {
+        if (currentProcess == null) {
+            Statistics.cpuTimeSpentIdle += timePassed;
+        }
         Statistics.cpuQueueLengthTime += cpuQueue.getQueueLength()*timePassed;
         if (cpuQueue.getQueueLength() > Statistics.cpuQueueLargestLength) {
             Statistics.cpuQueueLargestLength = cpuQueue.getQueueLength();

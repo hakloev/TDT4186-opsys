@@ -46,6 +46,7 @@ public class Process implements Constants
 
 	/** The global time of the last event involving this process */
 	private long timeOfLastEvent;
+    private long creationTime;
 
 	/**
 	 * Creates a new process with given parameters. Other parameters are randomly
@@ -62,6 +63,7 @@ public class Process implements Constants
 		avgIoInterval = (1 + (long)(Math.random()*25))*cpuTimeNeeded/100;
 		// The first and latest event involving this process is its creation
 		timeOfLastEvent = creationTime;
+        this.creationTime = creationTime;
 		// Assign a process ID
 		processId = nextProcessId++;
 		// Assign a pseudo-random color used by the GUI
