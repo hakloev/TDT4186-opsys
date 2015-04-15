@@ -24,6 +24,9 @@ public class IO {
      * @param timePassed	The amount of time that has passed since the last call to this method.
      */
     public void timePassed(long timePassed) {
+        if (currentProcess == null) {
+            Statistics.ioTimeSpentIdle += timePassed;
+        }
         Statistics.ioQueueLengthTime += ioQueue.getQueueLength()*timePassed;
         if (ioQueue.getQueueLength() > Statistics.ioQueueLargestLength) {
             Statistics.ioQueueLargestLength = ioQueue.getQueueLength();

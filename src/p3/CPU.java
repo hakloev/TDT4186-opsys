@@ -7,6 +7,7 @@ public class CPU {
     private Queue cpuQueue;
     private Process currentProcess = null;
     private Gui gui;
+    private long insertedTime;
 
     public CPU(Queue cpuQueue, Gui gui) {
         this.cpuQueue = cpuQueue;
