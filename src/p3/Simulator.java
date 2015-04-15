@@ -12,8 +12,6 @@ public class Simulator implements Constants
     private Memory memory;
 	/** Reference to the GUI interface */
 	private Gui gui;
-	/** Reference to the statistics collector */
-	private Statistics statistics;
 	/** The global clock */
     private long clock;
 	/** The length of the simulation */
@@ -48,9 +46,8 @@ public class Simulator implements Constants
 		this.simulationLength = simulationLength;
 		this.avgArrivalInterval = avgArrivalInterval;
 		this.gui = gui;
-		statistics = new Statistics();
 		eventQueue = new EventQueue();
-		memory = new Memory(memoryQueue, memorySize, statistics);
+		memory = new Memory(memoryQueue, memorySize);
 		clock = 0;
 		// Add code as needed
         this.maxCpuTime = maxCpuTime;
@@ -103,7 +100,7 @@ public class Simulator implements Constants
 		}
 		System.out.println("..done.");
 		// End the simulation by printing out the required statistics
-		statistics.printReport(simulationLength);
+		Statistics.printReport(simulationLength);
 	}
 
 	/**
@@ -188,7 +185,7 @@ public class Simulator implements Constants
         System.out.println("-- [DEBUG][PID: " + oldProcess.getProcessId() + "] Removing from CPU");
 
         pushProcessOnToCpuAndCreateNewEvent();
-        statistics.nufForcedOperations++;
+        Statistics.nufForcedOperations++;
 	}
 
 	/**
@@ -251,7 +248,7 @@ public class Simulator implements Constants
             System.out.println("-- [DEBUG][END-IO][PID: " + process.getProcessId() + "] Created END_IO of process");
             eventQueue.insertEvent(new Event(END_IO, clock + 1 + (long)(2*Math.random()*avgIoTime)));
         }
-        statistics.nufIoOperations++;
+        Statistics.nufIoOperations++;
 
 
 	}

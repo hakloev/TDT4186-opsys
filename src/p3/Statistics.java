@@ -37,7 +37,7 @@ public class Statistics
 	 * @param simulationLength	The number of milliseconds that the simulation covered.
 	 */
 
-    public void printReport(long simulationLength) {
+    public static void printReport(long simulationLength) {
 		System.out.println();
 		System.out.println("Simulation statistics:");
 		System.out.println();

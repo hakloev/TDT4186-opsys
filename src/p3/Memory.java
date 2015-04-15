@@ -7,8 +7,6 @@ package p3;
 public class Memory {
 	/** The queue of processes waiting for free memory */
 	private Queue memoryQueue;
-	/** A reference to the statistics collector */
-	private Statistics statistics;
 	/** The amount of memory in the memory device */
 	private long memorySize;
 	/** The amount of free memory in the memory device */
@@ -18,12 +16,10 @@ public class Memory {
 	 * Creates a new memory device with the given parameters.
 	 * @param memoryQueue	The memory queue to be used.
 	 * @param memorySize	The amount of memory in the memory device.
-	 * @param statistics	A reference to the statistics collector.
 	 */
-    public Memory(Queue memoryQueue, long memorySize, Statistics statistics) {
+    public Memory(Queue memoryQueue, long memorySize) {
 		this.memoryQueue = memoryQueue;
 		this.memorySize = memorySize;
-		this.statistics = statistics;
 		freeMemory = memorySize;
     }
 
@@ -70,9 +66,9 @@ public class Memory {
 	 * @param timePassed	The amount of time that has passed since the last call to this method.
 	 */
 	public void timePassed(long timePassed) {
-		statistics.memoryQueueLengthTime += memoryQueue.getQueueLength()*timePassed;
-		if (memoryQueue.getQueueLength() > statistics.memoryQueueLargestLength) {
-			statistics.memoryQueueLargestLength = memoryQueue.getQueueLength(); 
+		Statistics.memoryQueueLengthTime += memoryQueue.getQueueLength()*timePassed;
+		if (memoryQueue.getQueueLength() > Statistics.memoryQueueLargestLength) {
+			Statistics.memoryQueueLargestLength = memoryQueue.getQueueLength();
 		}
     }
     
