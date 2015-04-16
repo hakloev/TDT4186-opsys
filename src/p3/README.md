@@ -37,11 +37,10 @@ Fredrik Berg, Håkon Løvdal, Truls Mørk Pettersen
 
 ### Implementasjon
 
-Det er ikke gjort noen spesielle endringer i skjelletkoden som ble gitt for øvingen. Simulator har blitt utvidet og vi har implementert to klasser, IO og CPU.
+Det er ikke gjort noen spesielle endringer i skjelletkoden som ble gitt for øvingen. Simulator har blitt utvidet og vi har implementert to klasser, IO og CPU. I tillegg er feltene i Statistics gjort statiske, slik at disse kan aksesseres over alt.
 
 **Simulator**
-Hovedfunksjonen vi har implementert i simulator er pushProcessOnToCpuAndCreateNewEvent(), som muliggjør en endring av prosessen som er i CPU.
-Den lager også nye events basert på om tiden tilsier at en prosess skal switches, endres eller sendes til IO. Denne funksjonen blir kalt i flere deler
+Hovedfunksjonen vi har implementert i simulator er pushProcessOnToCpuAndCreateNewEvent(), som håndterer hva som skal gjøres når er prosess er midlertidig ferdig i CPU. Den lager nye events basert på om tiden tilsier at en prosess skal switches, endres eller sendes til IO. Denne funksjonen blir kalt i flere deler
 av event behandleren.
 
 **CPU, IO**
@@ -57,7 +56,7 @@ Det sørger for at IO køen blir behandlet helt til den er tom og at prosessene 
 #### Eksperimentering med round robin algoritme
 Ved manipulering og endring av tiden round robin algoritmen gir prosessene ser vi at ved lavere verdier som 200ms vil CPU bruke mye av tiden sin på å vente og ikke prosessere.
 Nærmere alle prosessene som kommer inn blir prosessesert ved en lavere verdi. For høye verdier jobber CPU oftere og en høyere andel tid er dermed brukt på prosessering.
-Ved høyere verdier for round robin algoritmer blir også køene vesentlig større. Endringen proganeres videre i systemet og fører til at prosessene står lengre i køer å venter.
+Ved høyere verdier for round robin algoritmer blir også køene vesentlig større. Endringen progeres videre i systemet og fører til at prosessene står lengre i køer å venter.
 Det gjelder å finne en verdi som gir en god kombinasjon av avbrudd og prosesseringstid som gir størst gjennomstrøm av prosesser.
 
 
