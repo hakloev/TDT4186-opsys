@@ -40,12 +40,15 @@ Fredrik Berg, Håkon Løvdal, Truls Mørk Pettersen
 Det er ikke gjort noen spesielle endringer i skjelletkoden som ble gitt for øvingen. Simulator har blitt utvidet og vi har implementert to klasser, IO og CPU.
 
 **Simulator**
+Hovedfunksjonen vi har implementert i simulator er pushProcessOnToCpuAndCreateNewEvent(), som muliggjør en endring av prosessen som er i CPU.
+Den lager også nye events basert på om tiden tilsier at en prosess skal switches, endres eller sendes til IO. Denne funksjonen blir kalt i flere deler
+av event behandleren.
 
+**CPU, IO**
+Klassene vi har lagt til er CPU og IO. Klassene har i seg selv veldig lik funksjonalitet ved at det begge styrer når en prosess skal lastes, fjernes eller settes inn
+i køen for den respektive klassen. IO operasjonen skiller seg ut fra CPU ved at den både før og etter en IO operasjon er kjørt vil lage en ny event som skal avslutte IO.
+Det sørger for at IO køen blir behandlet helt til den er tom og at prosessene blir tildelt tilbake til CPU.
 
-**CPU**
-
-
-**IO**
 
 
 
@@ -64,7 +67,8 @@ Ved å minske prosseseringstiden går prosessene fortere gjennom IO og blir rask
 
 
 #### Endring av CPU prosseseringstid
-
+Vil gjøre at vi kan ta inn flere prosesser og behandle dem raskere. En endring i CPU prosessering gjør at vi fort trenger en raskere behandling av IO også,
+ellers så vil store deler av prosessene bli lagt i kø for IO og bygge seg opp til den blir full. 
 
 
 #### Endring i minnestørrelse
